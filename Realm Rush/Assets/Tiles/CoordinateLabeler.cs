@@ -7,12 +7,19 @@ using TMPro;
 [ExecuteAlways] //will also run in edit mode 
 public class CoordinateLabeler : MonoBehaviour
 {
+    [SerializeField] Color defaultColor = Color.white;
+    [SerializeField] Color blockedColor = Color.gray;
+
     TextMeshPro label;
     Vector2Int coordinates = new Vector2Int();
 
+    Waypoint wayPoint;
+
     private void Awake() {
         label = GetComponent<TextMeshPro>();  
+        wayPoint = GetComponentInParent<Waypoint>();
         DisplayCoordinates();   
+        label.enabled = false;
     }
     
     void Update()
@@ -22,6 +29,9 @@ public class CoordinateLabeler : MonoBehaviour
             DisplayCoordinates();
             UpdateObjectName();
         }
+
+        ColorCoordinates();
+        ToggleLabels();
     }
 
     void DisplayCoordinates()
@@ -32,8 +42,27 @@ public class CoordinateLabeler : MonoBehaviour
         label.text = coordinates.x + ","+coordinates.y;
     }
 
+    void ToggleLabels()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            label.enabled = !label.IsActive();
+        }
+    }
     void UpdateObjectName()
     {
         transform.parent.name = coordinates.ToString();
+    }
+
+    void ColorCoordinates()
+    {
+        if ( wayPoint.IsPlaceable)
+        {
+            label.color = defaultColor;
+        }
+        else
+        {
+            label.color = blockedColor;
+        }
     }
 }
