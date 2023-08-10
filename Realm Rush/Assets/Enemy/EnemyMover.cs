@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Enemy))]
 public class EnemyMover : MonoBehaviour
 {
 
@@ -36,6 +37,12 @@ public class EnemyMover : MonoBehaviour
     {
         transform.position = path[0].transform.position;
     }
+
+    void FinishPath()
+    {
+        gameObject.SetActive(false);
+        enemy.StealGold();
+    }
     
     IEnumerator FollowPath()
     {
@@ -55,8 +62,7 @@ public class EnemyMover : MonoBehaviour
             }
         }
         //we are now at the end of the Path (at the Bank)
-        gameObject.SetActive(false);
-        enemy.StealGold();
+        FinishPath();
 
     }
 
